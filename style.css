@@ -1,0 +1,332 @@
+/* --- VARIABLES: TEMA DARK PURPLE GLASS --- */
+:root {
+    /* Morados y Magentas */
+    --gold: #b026ff;        /* Morado Neón principal */
+    --gold-light: #e0aaff;  /* Lila claro */
+    --coffee: #4a0072;      /* Violeta oscuro */
+    --coffee-dark: #240046; /* Fondo muy oscuro */
+    --cyan-blue: #ff007f;   /* Magenta para acentos */
+    
+    /* Base oscura */
+    --black-base: #000000;
+    
+    /* --- CAMBIO 1: VIDRIO MÁS TRANSPARENTE --- */
+    /* Reducimos la opacidad de 0.95 a 0.4 para que se vea el fondo */
+    --black-glass: rgba(20, 0, 35, 0.4); 
+    
+    --font-tech: 'VT323', monospace;
+    --font-clean: 'Montserrat', sans-serif;
+    --font-cursive: 'Great Vibes', cursive;
+    
+    /* --- CAMBIO 2: DEFINICIÓN DEL NUEVO CURSOR (FLECHA + ROSA) --- */
+    /* Creamos un SVG que combina una flecha blanca con borde negro y la rosa al lado */
+    --custom-cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'></* Sombra suave para la flecha */ filter id='shadow'><feDropShadow dx='1' dy='1' stdDeviation='1' flood-color='%23000' flood-opacity='0.5'/></filter><path fill='%23FFFFFF' stroke='%23000000' stroke-width='1' d='M2,2 L14,14 L9,14 L13,24 L9,26 L5,16 L0,21 L2,2 Z' style='filter:url(%23shadow);'/><text x='12' y='26' font-size='22'>🌹</text></svg>") 2 2, auto;
+}
+
+* { 
+    margin: 0; padding: 0; box-sizing: border-box; 
+} 
+
+body {
+    background-color: var(--black-base);
+    color: #fff;
+    font-family: var(--font-clean);
+    height: 100vh;
+    overflow: hidden; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    
+    /* Aplicamos el nuevo cursor */
+    cursor: var(--custom-cursor);
+}
+
+/* --- FONDO VIDEO --- */
+.innovative-bg {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -2; overflow: hidden;
+}
+#bg-video {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: blur(3px) grayscale(30%); /* Un poco más de desenfoque al fondo */
+    transform: scale(1.1);
+}
+.bg-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(10, 0, 20, 0.6); /* Capa oscura para que el texto sea legible */
+}
+
+/* --- EFECTO MOUSE (PÉTALOS QUE CAEN) --- */
+.magic-butterfly {
+    position: absolute;
+    pointer-events: none;
+    z-index: 9999;
+    font-size: 18px;
+    will-change: transform, opacity;
+    animation: petalFall 1.5s linear forwards;
+    display: flex; justify-content: center; align-items: center;
+    opacity: 0.9;
+}
+
+@keyframes petalFall {
+    0% { transform: translate(0, 0) rotate(0deg) scale(0.5); opacity: 1; }
+    50% { opacity: 0.8; transform: translate(-15px, 30px) rotate(90deg) scale(1); }
+    100% { transform: translate(-30px, 80px) rotate(180deg) scale(0.8); opacity: 0; }
+}
+
+/* --- PANTALLA DE CARGA --- */
+#enter-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #020005; display: flex; justify-content: center; align-items: center;
+    z-index: 2000; transition: opacity 0.8s ease;
+}
+
+#enter-btn {
+    padding: 15px 50px;
+    background: linear-gradient(135deg, #000, var(--coffee-dark));
+    color: var(--gold-light);
+    font-family: var(--font-clean);
+    font-size: 1.2rem; font-weight: 600; letter-spacing: 2px;
+    border: 2px solid var(--gold);
+    border-radius: 50px; 
+    transition: 0.4s ease;
+    text-transform: uppercase;
+    box-shadow: 0 0 15px rgba(176, 38, 255, 0.3);
+    display: flex; align-items: center; gap: 10px;
+    cursor: var(--custom-cursor); /* Cursor en el botón */
+}
+#enter-btn i { color: var(--cyan-blue); transition: 0.4s; }
+#enter-btn:hover {
+    background: var(--gold); color: #fff; border-color: var(--cyan-blue);
+    box-shadow: 0 0 40px rgba(176, 38, 255, 0.8), 0 0 10px var(--cyan-blue);
+    transform: scale(1.05);
+}
+#enter-btn:hover i { color: #fff; }
+
+/* --- LAYOUT PRINCIPAL TIPO VIDRIO --- */
+#main-layout {
+    display: flex;
+    width: 900px; max-width: 95%; height: 600px; max-height: 90vh;
+    
+    /* --- CAMBIO IMPORTANTE: EFECTO VIDRIO MEJORADO --- */
+    background: var(--black-glass); /* Usamos el fondo más transparente */
+    backdrop-filter: blur(30px) saturate(120%); /* Mucho más desenfoque para efecto "frosted glass" */
+    -webkit-backdrop-filter: blur(30px) saturate(120%); /* Para Safari */
+    border: 1px solid rgba(176, 38, 255, 0.3); /* Borde sutil morado */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); /* Sombra para profundidad */
+    
+    position: relative;
+    border-radius: 40px; 
+    /* Quitamos la animación breathingGlow del borde completo porque distrae del efecto vidrio */
+    /* animation: breathingGlow 4s infinite alternate ease-in-out; */
+    overflow: hidden; 
+    transition: opacity 0.8s ease, transform 0.8s ease, filter 0.4s ease;
+}
+
+.hidden-layout { opacity: 0; transform: scale(0.9) translateY(50px); pointer-events: none; }
+
+/* Decoraciones de borde (Líneas brillantes superior e inferior) */
+.border-line { position: absolute; display: block; z-index: 10; pointer-events: none; opacity: 0.6; }
+.line-top { top: 0; left: 20px; right: 20px; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); animation: flashHorizontal 4s infinite; }
+.line-bottom { bottom: 0; left: 20px; right: 20px; height: 2px; background: linear-gradient(90deg, transparent, var(--cyan-blue), transparent); animation: flashHorizontal 4s infinite reverse; }
+
+@keyframes flashHorizontal { 0% { opacity: 0; transform: scaleX(0); } 50% { opacity: 0.8; transform: scaleX(1); } 100% { opacity: 0; transform: scaleX(0); } }
+
+/* --- BARRA LATERAL (VIDRIO MÁS OSCURO) --- */
+.sidebar-gold {
+    width: 300px; flex-shrink: 0; 
+    /* Hacemos la barra lateral un poco más opaca que el contenido para contraste */
+    background: linear-gradient(160deg, rgba(20, 0, 35, 0.6), rgba(176, 38, 255, 0.1));
+    padding: 30px 20px; display: flex; flex-direction: column; align-items: center;
+    border-right: 1px solid rgba(176, 38, 255, 0.2);
+}
+
+.profile-center-glow { width: 120px; height: 120px; margin-bottom: 20px; flex-shrink: 0; }
+.pfp-blue {
+    width: 100%; height: 100%; border-radius: 50%; object-fit: cover; 
+    border: 3px solid var(--gold); 
+    box-shadow: 0 0 25px rgba(176, 38, 255, 0.6), 0 0 10px var(--cyan-blue);
+    animation: float 4s ease-in-out infinite;
+}
+
+.name-container { justify-content: center; width: 100%; margin-bottom: 5px; }
+.cursive-name {
+    font-family: var(--font-cursive);
+    font-size: 3.5rem;
+    background: linear-gradient(180deg, #fff 20%, var(--gold) 60%, var(--cyan-blue) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 8px rgba(176, 38, 255, 0.8));
+    text-align: center; margin: 0; padding-right: 20px; margin-right: -10px; line-height: 1.2;
+}
+
+.uid-gold { font-family: var(--font-tech); color: #cbb2fe; letter-spacing: 2px; font-size: 1rem; margin-bottom: 30px; }
+
+/* --- BOTONES NAV --- */
+.nav-menu { width: 100%; display: flex; flex-direction: column; gap: 15px; }
+
+@keyframes slideInLeftBtns {
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.nav-btn-gold {
+    width: 100%; padding: 15px 20px;
+    /* Botones más transparentes también */
+    background: linear-gradient(90deg, rgba(16, 0, 21, 0.7), rgba(36, 0, 70, 0.7)); 
+    border: 1px solid rgba(176, 38, 255, 0.3);
+    border-radius: 8px; color: var(--gold); text-align: left;
+    font-family: var(--font-clean); font-weight: 700; 
+    transition: all 0.4s ease;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    text-transform: uppercase; letter-spacing: 1px;
+    opacity: 0; 
+    cursor: var(--custom-cursor);
+}
+
+.nav-btn-gold:hover {
+    background: linear-gradient(90deg, var(--coffee), var(--gold)); 
+    color: #fff; border-color: #fff;
+    box-shadow: 0 0 25px rgba(176, 38, 255, 0.6);
+}
+.nav-btn-gold:hover i { color: #fff; }
+
+.animate-buttons .nav-btn-gold { animation: slideInLeftBtns 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+.animate-buttons .nav-btn-gold:nth-child(1) { animation-delay: 0.2s; }
+.animate-buttons .nav-btn-gold:nth-child(2) { animation-delay: 0.4s; }
+.animate-buttons .nav-btn-gold:nth-child(3) { animation-delay: 0.6s; }
+.animate-buttons .nav-btn-gold:nth-child(4) { animation-delay: 0.8s; }
+
+
+/* --- CONTENIDO PRINCIPAL --- */
+.content-area-gold {
+    flex-grow: 1; display: flex; justify-content: center; align-items: center;
+    padding: 40px; position: relative;
+    /* Sombra interna sutil para profundidad */
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.3);
+}
+
+.center-title-fem { 
+    font-family: var(--font-cursive); font-weight: 400; font-size: 5rem; color: var(--gold); 
+    margin-bottom: 5px; line-height: 1;
+    text-shadow: 0 0 25px rgba(176, 38, 255, 0.6); padding-right: 15px;
+}
+.text-wrapper { max-width: 550px; line-height: 1.6; }
+#typing-text {
+    font-family: var(--font-clean); font-size: 1rem; color: #f0e6ff; line-height: 1.3;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+}
+.cursor { color: var(--cyan-blue); animation: blink 1s infinite; font-weight: bold; font-size: 2rem; }
+
+/* --- MODALES --- */
+.modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000; pointer-events: none; opacity: 0; transition: opacity 0.4s;
+    backdrop-filter: blur(15px); background: rgba(5,0,10,0.6); /* Modal también tipo vidrio */
+}
+.modal.active { pointer-events: auto; opacity: 1; }
+
+.modal-content.gold-border {
+    background: rgba(15, 0, 21, 0.85); /* Fondo modal semi-transparente */
+    border: 1px solid var(--gold);
+    padding: 35px; width: 90%; max-width: 650px; position: relative;
+    box-shadow: 0 0 60px rgba(176, 38, 255, 0.3);
+    border-radius: 20px; 
+    transform: scale(0.95) translateY(20px); transition: 0.4s;
+    backdrop-filter: blur(10px);
+}
+.modal.active .modal-content { transform: scale(1) translateY(0); }
+.close-btn { position: absolute; top: 20px; right: 25px; font-size: 1.8rem; color: #777; cursor: pointer; z-index: 30;}
+.close-btn:hover { color: var(--cyan-blue); transform: rotate(90deg); }
+.modal h3 { font-family: var(--font-clean); font-weight: 700; color: var(--gold); border-bottom: 1px solid rgba(176, 38, 255, 0.3); padding-bottom: 15px; margin-bottom: 25px; letter-spacing: 2px; }
+
+/* Otros elementos */
+.friend-item-gold { border-bottom: 1px solid rgba(42, 0, 53, 0.5); padding: 12px 0; color: #ddd; display: flex; align-items: center; gap: 10px; font-size: 1rem; }
+.friend-item-gold i { color: var(--cyan-blue); font-size: 1.1rem; text-shadow: 0 0 5px var(--cyan-blue); }
+.friend-item-gold span { flex-grow: 1; font-weight: 600; }
+.friend-item-gold small { color: #aaa; }
+
+/* --- GALERIA 3D --- */
+.gallery-wrapper { position: relative; width: 100%; display: flex; justify-content: center; align-items: center; }
+.gallery-container-3d { 
+    height: 400px; position: relative; perspective: 1200px; 
+    display: flex; align-items: center; justify-content: flex-start; width: 100%; overflow: hidden; 
+}
+.photo-carousel-3d { 
+    display: flex; position: absolute; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); 
+    transform-style: preserve-3d; align-items: center; height: 100%; left: 0; 
+}
+.card-3d-gold {
+    width: 240px; height: 320px; margin: 0 20px; flex-shrink: 0;
+    background: #000; border: 2px solid #330044; border-radius: 10px; overflow: hidden;
+    transition: all 0.5s; opacity: 0.3; transform: scale(0.8) rotateY(25deg);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.8); cursor: var(--custom-cursor);
+}
+.card-3d-gold.active {
+    opacity: 1; transform: scale(1.1) rotateY(0deg) translateZ(30px);
+    border-color: var(--gold); box-shadow: 0 0 40px rgba(176, 38, 255, 0.4); z-index: 10;
+}
+.nav-arrow-gold {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(0,0,0,0.6); color: var(--gold); border: 1px solid var(--gold);
+    width: 40px; height: 40px; border-radius: 50%; font-size: 1.5rem; cursor: var(--custom-cursor);
+    z-index: 20; transition: 0.3s;
+}
+.nav-arrow-gold:hover { background: var(--gold); color: #000; box-shadow: 0 0 25px var(--gold); }
+.prev-3d { left: -15px; } .next-3d { right: -15px; }
+
+/* REPRODUCTOR */
+.music-player-gold { display: flex; align-items: center; gap: 30px; }
+.vinyl-record-gold {
+    width: 90px; height: 90px; border-radius: 50%; background: #0a0a0a;
+    border: 2px solid var(--gold); display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 0 20px rgba(176, 38, 255, 0.3); color: var(--gold); font-size: 1.8rem; flex-shrink: 0;
+}
+.vinyl-spin { animation: spin 4s linear infinite; }
+.song-info-gold { width: 100%; }
+.song-info-gold h4 { color: var(--cyan-blue); margin-bottom: 8px; }
+.controls-gold button { background: none; border: none; color: #fff; cursor: var(--custom-cursor); font-size: 1.3rem; margin-right: 15px;}
+.controls-gold button:hover { color: var(--gold); transform: scale(1.1); text-shadow: 0 0 10px var(--gold); }
+.fill-gold { width: 0%; height: 100%; background: var(--gold); box-shadow: 0 0 10px var(--gold); }
+.fake-bar-gold { width: 100%; height: 4px; background: rgba(51, 51, 51, 0.5); margin-top: 10px; border-radius: 2px; }
+
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* --- RESPONSIVE TOTAL --- */
+@media (max-width: 950px) {
+    #main-layout {
+        flex-direction: column; width: 95%; height: auto; max-height: 90vh;
+        border-radius: 20px; overflow-y: auto; overflow-x: hidden;
+        backdrop-filter: blur(20px); /* Menos blur en móviles para rendimiento */
+    }
+    .sidebar-gold { width: 100%; padding: 20px; border-right: none; border-bottom: 1px solid rgba(176, 38, 255, 0.2); flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 20px;}
+    .profile-center-glow { width: 80px; height: 80px; margin: 0; }
+    .nav-menu { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+    .nav-btn-gold { width: auto; font-size: 0.9rem; padding: 10px 15px; opacity: 1; animation: none !important;}
+    
+    .content-area-gold { padding: 30px 15px; min-height: auto; }
+    .center-title-fem { font-size: 3.5rem; }
+    #typing-text { font-size: 1.5rem; }
+    
+    .card-3d-gold { width: 160px; height: 220px; margin: 0 10px; }
+    .gallery-container-3d { height: 300px; }
+    .nav-arrow-gold { width: 35px; height: 35px; font-size: 1.2rem; }
+    
+    .music-player-gold { flex-direction: column; text-align: center; gap: 15px; }
+    .controls-gold { justify-content: center; display: flex; }
+}
+
+@media (max-width: 480px) {
+    .cursive-name { font-size: 2.5rem; }
+    .center-title-fem { font-size: 2.8rem; }
+    .sidebar-gold { padding: 15px; }
+    .nav-btn-gold { width: 45%; justify-content: center; }
+    
+    .card-3d-gold { width: 140px; height: 190px; margin: 0 5px; }
+    .prev-3d { left: -5px; } .next-3d { right: -5px; }
+}
