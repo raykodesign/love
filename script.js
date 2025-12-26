@@ -1,35 +1,34 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- NUEVO EFECTO MOUSE: MARIPOSAS ---
-    let colorToggle = false; 
-
+    // --- EFECTO MOUSE: SOLO BRILLOS (SIN EMOJIS) ---
     document.addEventListener('mousemove', (e) => {
-        // Reducimos frecuencia para no saturar
-        if(Math.random() > 0.2) return;
+        // Reducimos la frecuencia (crea 1 cada 25ms aprox)
+        if(Math.random() > 0.15) return;
 
-        // Crear mariposa
-        const butterfly = document.createElement('div');
-        butterfly.classList.add('magic-butterfly');
+        // Crear el elemento de brillo
+        const sparkle = document.createElement('div');
+        sparkle.classList.add('sparkle');
         
-        // Alternar color (dorado por defecto, azul si tiene clase .blue)
-        if (colorToggle) {
-            butterfly.classList.add('blue');
-        }
-        colorToggle = !colorToggle; 
-
-        // Posición mouse
-        butterfly.style.left = e.pageX + 'px';
-        butterfly.style.top = e.pageY + 'px';
+        // Posición exacta del mouse + pequeña variación
+        const x = e.pageX + (Math.random() * 10 - 5);
+        const y = e.pageY + (Math.random() * 10 - 5);
         
-        document.body.appendChild(butterfly);
+        sparkle.style.left = x + 'px';
+        sparkle.style.top = y + 'px';
+        
+        // Color aleatorio entre blanco y dorado/morado del tema
+        const colors = ['#ffffff', '#b026ff', '#e0aaff', '#ff007f'];
+        sparkle.style.background = `radial-gradient(circle, #fff 10%, ${colors[Math.floor(Math.random() * colors.length)]} 100%)`;
 
-        // Eliminar
+        document.body.appendChild(sparkle);
+
+        // Eliminar del DOM al terminar la animación
         setTimeout(() => {
-            butterfly.remove();
-        }, 1000);
+            sparkle.remove();
+        }, 800);
     });
 
-    // --- ELEMENTOS PRINCIPALES ---
+    // --- ELEMENTOS ---
     const enterScreen = document.getElementById('enter-screen');
     const enterBtn = document.getElementById('enter-btn');
     const mainLayout = document.getElementById('main-layout');
@@ -39,25 +38,50 @@ document.addEventListener('DOMContentLoaded', () => {
     const playIcon = document.getElementById('play-icon');
     const progressBar = document.getElementById('progress-bar');
 
-    // --- ENTRADA ---
+    // --- ENTRADA Y MÚSICA INSTANTÁNEA ---
     enterBtn.addEventListener('click', () => {
+        // 1. INTENTAR REPRODUCIR AUDIO INMEDIATAMENTE
+        // Esto es necesario porque los navegadores bloquean el audio 
+        // a menos que sea una respuesta directa a un clic.
+        if(audio) {
+            audio.volume = 0.5; // Volumen inicial
+            const playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Audio inició correctamente
+                    isPlaying = true;
+                    if(vinyl) vinyl.classList.add('vinyl-spin');
+                    if(playIcon) {
+                        playIcon.classList.remove('fa-play');
+                        playIcon.classList.add('fa-pause');
+                    }
+                    pInt = setInterval(() => {
+                        if(progressBar && audio.duration) {
+                            progressBar.style.width = (audio.currentTime/audio.duration)*100 + "%";
+                        }
+                    }, 100);
+                })
+                .catch(error => {
+                    console.log("El navegador bloqueó el audio o ruta incorrecta:", error);
+                });
+            }
+        }
+
+        // 2. Animación visual de entrada
         enterScreen.style.opacity = '0';
-        
         setTimeout(() => {
             enterScreen.style.display = 'none';
             mainLayout.classList.remove('hidden-layout');
-            
             setTimeout(() => {
                 document.querySelector('.nav-menu').classList.add('animate-buttons');
             }, 300);
-
             initTypewriter();
-            playMusic();
         }, 800);
     });
 
-    // --- MAQUINA DE ESCRIBIR (NUEVA FUENTE APLICADA EN CSS) ---
-    const welcomeMsg = "Eres mi amor para otra vida, mi amor para otra ocasión. Llegaste demasiado pronto y aun así fue tarde. Me entendías más que nadie, y no existía alguien, que te quisiera más que yo. Siempre he creído que todo es posible y que lo imposible...Solo tarda un poquito más. Pero querido amor imposible, contigo esa teoría está de más. A veces siento que fuimos impuntuales, o que el destino se haya encaprichado tantocon nosotros...Que decidió ponernos un inuto tarde. Tal vez una persona antes o una persona después fuimos todo y no fuimos nada.";
+    // --- MAQUINA DE ESCRIBIR ---
+    const welcomeMsg = "Eres mi amor para otra vida, mi amor para otra ocasión. Llegaste demasiado pronto y aun así fue tarde. Me entendías más que nadie, y no existía alguien, que te quisiera más que yo. Siempre he creído que todo es posible y que lo imposible...Solo tarda un poquito más. Pero querido amor imposible, contigo esa teoría está de más. A veces siento que fuimos impuntuales, o que el destino se haya encaprichado tanto con nosotros...Que decidió ponernos un minuto tarde. Tal vez una persona antes o una persona después fuimos todo y no fuimos nada.";
     function initTypewriter() {
         let i = 0;
         typingText.innerHTML = "";
@@ -65,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (i < welcomeMsg.length) {
                 typingText.innerHTML += welcomeMsg.charAt(i);
                 i++;
-                setTimeout(type, 50); // Un poco más lento para la cursiva
+                setTimeout(type, 50); 
             }
         }
         type();
@@ -78,12 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.classList.add('active');
             mainLayout.style.filter = "blur(10px) grayscale(50%)";
             mainLayout.style.transform = "scale(0.98)";
-            
-            // Si es galería, recalcular posición con un pequeño delay para asegurar que el DOM ya pintó el modal
             if(modalId === 'modal-gallery') {
-                setTimeout(() => {
-                    updateGallery3D();
-                }, 50);
+                setTimeout(() => { updateGallery3D(); }, 50);
             }
         }
     };
@@ -98,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('modal')) closeModal(e.target.id);
     };
 
-    // --- GALERÍA 3D (CORREGIDA Y CENTRADA) ---
+    // --- GALERÍA 3D ---
     const galleryImages = [
         "https://xatimg.com/image/UCQwTE98gue9.jpg",
         "https://xatimg.com/image/IgoLKiYoP4US.jpg",
@@ -111,36 +131,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const carouselTrack = document.getElementById('carousel-3d-track');
     let galleryIndex = 0; 
 
-    // Renderizar cartas
-    carouselTrack.innerHTML = "";
-    galleryImages.forEach((src, i) => {
-        const card = document.createElement('div');
-        card.className = 'card-3d-gold';
-        card.innerHTML = `<img src="${src}" alt="Img ${i}" style="width:100%;height:100%;object-fit:cover;">`;
-        card.onclick = () => { galleryIndex = i; updateGallery3D(); };
-        carouselTrack.appendChild(card);
-    });
+    if(carouselTrack) {
+        carouselTrack.innerHTML = "";
+        galleryImages.forEach((src, i) => {
+            const card = document.createElement('div');
+            card.className = 'card-3d-gold';
+            card.innerHTML = `<img src="${src}" alt="Img ${i}" style="width:100%;height:100%;object-fit:cover;">`;
+            card.onclick = () => { galleryIndex = i; updateGallery3D(); };
+            carouselTrack.appendChild(card);
+        });
+    }
 
-    // Función de centrado precisa
     window.updateGallery3D = () => {
         const cards = document.querySelectorAll('#carousel-3d-track .card-3d-gold');
         if(!cards.length) return;
-        
-        // Activar clase
         cards.forEach(c => c.classList.remove('active'));
         if(cards[galleryIndex]) cards[galleryIndex].classList.add('active');
 
-        // Cálculos matemáticos precisos
         const container = document.querySelector('.gallery-container-3d');
-        const containerWidth = container.offsetWidth;
-        
-        // Obtener ancho real de la tarjeta (incluyendo margen si es posible, pero offsetWidth es seguro)
+        const containerWidth = container ? container.offsetWidth : 800;
         const cardWidth = cards[0].offsetWidth; 
-        const cardMargin = 40; // 20px izquierda + 20px derecha definidos en CSS
+        const cardMargin = 40; 
         const fullCardSpace = cardWidth + cardMargin;
-
-        // Formula: Centro del contenedor - (Posición de la carta actual) - (Mitad de la carta actual)
-        // Ajuste: +20 es para compensar el margen inicial izquierdo de la primera carta
         const centerPosition = (containerWidth / 2) - (galleryIndex * fullCardSpace) - (cardWidth / 2) - 20;
 
         carouselTrack.style.transform = `translateX(${centerPosition}px)`;
@@ -153,45 +165,60 @@ document.addEventListener('DOMContentLoaded', () => {
         updateGallery3D();
     };
 
-    // --- MÚSICA ---
+    // --- MÚSICA (LÓGICA DE CONTROL) ---
     const playlist = [
         { title: "BIRDS OF A FEATHER", artist: "Billie Eilish", src: "audio/Billie Eilish - BIRDS OF A FEATHER.mp3" },
     ];
     let sIdx = 0; let isPlaying = false; let pInt;
 
     function loadMusic(i) {
+        if(!audio) return;
         audio.src = playlist[i].src;
-        document.getElementById('song-title').innerText = playlist[i].title;
-        document.getElementById('song-artist').innerText = playlist[i].artist;
+        const titleEl = document.getElementById('song-title');
+        const artistEl = document.getElementById('song-artist');
+        if(titleEl) titleEl.innerText = playlist[i].title;
+        if(artistEl) artistEl.innerText = playlist[i].artist;
     }
     
-    window.playMusic = () => {
-        audio.play().then(() => {
-            isPlaying = true;
-            vinyl.classList.add('vinyl-spin');
-            playIcon.className = "fas fa-pause";
-            pInt = setInterval(() => {
-                progressBar.style.width = (audio.currentTime/audio.duration)*100 + "%";
-            }, 100);
-        }).catch(() => {});
-    };
-    
+    // Esta función se usa para los botones del reproductor
     window.togglePlay = () => {
         if(isPlaying) {
             audio.pause(); isPlaying = false;
-            vinyl.classList.remove('vinyl-spin');
-            playIcon.className = "fas fa-play";
+            if(vinyl) vinyl.classList.remove('vinyl-spin');
+            if(playIcon) {
+                playIcon.classList.remove('fa-pause');
+                playIcon.classList.add('fa-play');
+            }
             clearInterval(pInt);
         } else {
-            playMusic();
+            audio.play();
+            isPlaying = true;
+            if(vinyl) vinyl.classList.add('vinyl-spin');
+            if(playIcon) {
+                playIcon.classList.remove('fa-play');
+                playIcon.classList.add('fa-pause');
+            }
+            pInt = setInterval(() => {
+                if(progressBar) progressBar.style.width = (audio.currentTime/audio.duration)*100 + "%";
+            }, 100);
         }
     };
     
-    window.nextSong = () => { sIdx=(sIdx+1)%playlist.length; loadMusic(sIdx); playMusic(); };
-    window.prevSong = () => { sIdx=(sIdx-1+playlist.length)%playlist.length; loadMusic(sIdx); playMusic(); };
+    window.nextSong = () => { 
+        sIdx=(sIdx+1)%playlist.length; 
+        loadMusic(sIdx); 
+        // Si estaba sonando, que siga sonando
+        if(isPlaying) { audio.play(); } 
+    };
+    window.prevSong = () => { 
+        sIdx=(sIdx-1+playlist.length)%playlist.length; 
+        loadMusic(sIdx); 
+        if(isPlaying) { audio.play(); } 
+    };
+    
+    // Carga inicial (pero no play automático, eso lo hace el botón ENTER)
     loadMusic(0);
 
-    // Re-calcular galería si cambian tamaño de ventana
     window.addEventListener('resize', () => {
         updateGallery3D();
     });
