@@ -10,17 +10,16 @@
     /* Base oscura */
     --black-base: #000000;
     
-    /* --- CAMBIO 1: VIDRIO MÁS TRANSPARENTE --- */
-    /* Reducimos la opacidad de 0.95 a 0.4 para que se vea el fondo */
+    /* Vidrio */
     --black-glass: rgba(20, 0, 35, 0.4); 
     
     --font-tech: 'VT323', monospace;
     --font-clean: 'Montserrat', sans-serif;
     --font-cursive: 'Great Vibes', cursive;
     
-    /* --- CAMBIO 2: DEFINICIÓN DEL NUEVO CURSOR (FLECHA + ROSA) --- */
-    /* Creamos un SVG que combina una flecha blanca con borde negro y la rosa al lado */
-    --custom-cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'></* Sombra suave para la flecha */ filter id='shadow'><feDropShadow dx='1' dy='1' stdDeviation='1' flood-color='%23000' flood-opacity='0.5'/></filter><path fill='%23FFFFFF' stroke='%23000000' stroke-width='1' d='M2,2 L14,14 L9,14 L13,24 L9,26 L5,16 L0,21 L2,2 Z' style='filter:url(%23shadow);'/><text x='12' y='26' font-size='22'>🌹</text></svg>") 2 2, auto;
+    /* --- CURSOR NUEVO: Pequeño, elegante, sin rosa --- */
+    /* Es una flecha blanca pequeña de 20px con borde morado */
+    --custom-cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'><path fill='%23FFFFFF' stroke='%23b026ff' stroke-width='1.5' d='M2,2 L14,13 L9,13 L12,20 L10,21 L7,14 L2,18 Z' style='filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.8));'/></svg>") 0 0, auto;
 }
 
 * { 
@@ -38,8 +37,13 @@ body {
     align-items: center;
     position: relative;
     
-    /* Aplicamos el nuevo cursor */
+    /* Aplicamos el nuevo cursor en todo el cuerpo */
     cursor: var(--custom-cursor);
+}
+
+/* --- ELEMENTOS CLICABLES (Para asegurar que el cursor se mantenga) --- */
+a, button, .card-3d-gold, .nav-arrow-gold {
+    cursor: var(--custom-cursor) !important;
 }
 
 /* --- FONDO VIDEO --- */
@@ -50,30 +54,32 @@ body {
 #bg-video {
     width: 100%; height: 100%;
     object-fit: cover;
-    filter: blur(3px) grayscale(30%); /* Un poco más de desenfoque al fondo */
+    filter: blur(3px) grayscale(30%);
     transform: scale(1.1);
 }
 .bg-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(10, 0, 20, 0.6); /* Capa oscura para que el texto sea legible */
+    background: rgba(10, 0, 20, 0.6);
 }
 
-/* --- EFECTO MOUSE (PÉTALOS QUE CAEN) --- */
-.magic-butterfly {
+/* --- EFECTO MOUSE: BRILLOS (SIN EMOJIS) --- */
+.sparkle {
     position: absolute;
+    width: 10px; height: 10px; /* Más pequeñitos */
+    background: radial-gradient(circle, #fff 20%, var(--gold) 100%);
+    /* Estrella de 4 puntas */
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
     pointer-events: none;
     z-index: 9999;
-    font-size: 18px;
     will-change: transform, opacity;
-    animation: petalFall 1.5s linear forwards;
-    display: flex; justify-content: center; align-items: center;
-    opacity: 0.9;
+    animation: sparkleAnim 0.8s ease-out forwards;
+    box-shadow: 0 0 8px var(--gold);
 }
 
-@keyframes petalFall {
-    0% { transform: translate(0, 0) rotate(0deg) scale(0.5); opacity: 1; }
-    50% { opacity: 0.8; transform: translate(-15px, 30px) rotate(90deg) scale(1); }
-    100% { transform: translate(-30px, 80px) rotate(180deg) scale(0.8); opacity: 0; }
+@keyframes sparkleAnim {
+    0% { transform: scale(0) rotate(0deg); opacity: 0.8; }
+    50% { opacity: 1; transform: scale(1) rotate(45deg); }
+    100% { transform: scale(0) rotate(90deg); opacity: 0; }
 }
 
 /* --- PANTALLA DE CARGA --- */
@@ -95,7 +101,8 @@ body {
     text-transform: uppercase;
     box-shadow: 0 0 15px rgba(176, 38, 255, 0.3);
     display: flex; align-items: center; gap: 10px;
-    cursor: var(--custom-cursor); /* Cursor en el botón */
+    /* Cursor personalizado forzado */
+    cursor: var(--custom-cursor);
 }
 #enter-btn i { color: var(--cyan-blue); transition: 0.4s; }
 #enter-btn:hover {
@@ -109,35 +116,29 @@ body {
 #main-layout {
     display: flex;
     width: 900px; max-width: 95%; height: 600px; max-height: 90vh;
-    
-    /* --- CAMBIO IMPORTANTE: EFECTO VIDRIO MEJORADO --- */
-    background: var(--black-glass); /* Usamos el fondo más transparente */
-    backdrop-filter: blur(30px) saturate(120%); /* Mucho más desenfoque para efecto "frosted glass" */
-    -webkit-backdrop-filter: blur(30px) saturate(120%); /* Para Safari */
-    border: 1px solid rgba(176, 38, 255, 0.3); /* Borde sutil morado */
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); /* Sombra para profundidad */
-    
+    background: var(--black-glass);
+    backdrop-filter: blur(30px) saturate(120%);
+    -webkit-backdrop-filter: blur(30px) saturate(120%);
+    border: 1px solid rgba(176, 38, 255, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     position: relative;
     border-radius: 40px; 
-    /* Quitamos la animación breathingGlow del borde completo porque distrae del efecto vidrio */
-    /* animation: breathingGlow 4s infinite alternate ease-in-out; */
     overflow: hidden; 
     transition: opacity 0.8s ease, transform 0.8s ease, filter 0.4s ease;
 }
 
 .hidden-layout { opacity: 0; transform: scale(0.9) translateY(50px); pointer-events: none; }
 
-/* Decoraciones de borde (Líneas brillantes superior e inferior) */
+/* Decoraciones de borde */
 .border-line { position: absolute; display: block; z-index: 10; pointer-events: none; opacity: 0.6; }
 .line-top { top: 0; left: 20px; right: 20px; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); animation: flashHorizontal 4s infinite; }
 .line-bottom { bottom: 0; left: 20px; right: 20px; height: 2px; background: linear-gradient(90deg, transparent, var(--cyan-blue), transparent); animation: flashHorizontal 4s infinite reverse; }
 
 @keyframes flashHorizontal { 0% { opacity: 0; transform: scaleX(0); } 50% { opacity: 0.8; transform: scaleX(1); } 100% { opacity: 0; transform: scaleX(0); } }
 
-/* --- BARRA LATERAL (VIDRIO MÁS OSCURO) --- */
+/* --- BARRA LATERAL --- */
 .sidebar-gold {
     width: 300px; flex-shrink: 0; 
-    /* Hacemos la barra lateral un poco más opaca que el contenido para contraste */
     background: linear-gradient(160deg, rgba(20, 0, 35, 0.6), rgba(176, 38, 255, 0.1));
     padding: 30px 20px; display: flex; flex-direction: column; align-items: center;
     border-right: 1px solid rgba(176, 38, 255, 0.2);
@@ -173,7 +174,6 @@ body {
 
 .nav-btn-gold {
     width: 100%; padding: 15px 20px;
-    /* Botones más transparentes también */
     background: linear-gradient(90deg, rgba(16, 0, 21, 0.7), rgba(36, 0, 70, 0.7)); 
     border: 1px solid rgba(176, 38, 255, 0.3);
     border-radius: 8px; color: var(--gold); text-align: left;
@@ -197,14 +197,11 @@ body {
 .animate-buttons .nav-btn-gold:nth-child(1) { animation-delay: 0.2s; }
 .animate-buttons .nav-btn-gold:nth-child(2) { animation-delay: 0.4s; }
 .animate-buttons .nav-btn-gold:nth-child(3) { animation-delay: 0.6s; }
-.animate-buttons .nav-btn-gold:nth-child(4) { animation-delay: 0.8s; }
-
 
 /* --- CONTENIDO PRINCIPAL --- */
 .content-area-gold {
     flex-grow: 1; display: flex; justify-content: center; align-items: center;
     padding: 40px; position: relative;
-    /* Sombra interna sutil para profundidad */
     box-shadow: inset 0 0 50px rgba(0,0,0,0.3);
 }
 
@@ -225,12 +222,12 @@ body {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
     z-index: 1000; pointer-events: none; opacity: 0; transition: opacity 0.4s;
-    backdrop-filter: blur(15px); background: rgba(5,0,10,0.6); /* Modal también tipo vidrio */
+    backdrop-filter: blur(15px); background: rgba(5,0,10,0.6); 
 }
 .modal.active { pointer-events: auto; opacity: 1; }
 
 .modal-content.gold-border {
-    background: rgba(15, 0, 21, 0.85); /* Fondo modal semi-transparente */
+    background: rgba(15, 0, 21, 0.85);
     border: 1px solid var(--gold);
     padding: 35px; width: 90%; max-width: 650px; position: relative;
     box-shadow: 0 0 60px rgba(176, 38, 255, 0.3);
@@ -243,7 +240,6 @@ body {
 .close-btn:hover { color: var(--cyan-blue); transform: rotate(90deg); }
 .modal h3 { font-family: var(--font-clean); font-weight: 700; color: var(--gold); border-bottom: 1px solid rgba(176, 38, 255, 0.3); padding-bottom: 15px; margin-bottom: 25px; letter-spacing: 2px; }
 
-/* Otros elementos */
 .friend-item-gold { border-bottom: 1px solid rgba(42, 0, 53, 0.5); padding: 12px 0; color: #ddd; display: flex; align-items: center; gap: 10px; font-size: 1rem; }
 .friend-item-gold i { color: var(--cyan-blue); font-size: 1.1rem; text-shadow: 0 0 5px var(--cyan-blue); }
 .friend-item-gold span { flex-grow: 1; font-weight: 600; }
@@ -297,12 +293,12 @@ body {
 @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
-/* --- RESPONSIVE TOTAL --- */
+/* --- RESPONSIVE --- */
 @media (max-width: 950px) {
     #main-layout {
         flex-direction: column; width: 95%; height: auto; max-height: 90vh;
         border-radius: 20px; overflow-y: auto; overflow-x: hidden;
-        backdrop-filter: blur(20px); /* Menos blur en móviles para rendimiento */
+        backdrop-filter: blur(20px);
     }
     .sidebar-gold { width: 100%; padding: 20px; border-right: none; border-bottom: 1px solid rgba(176, 38, 255, 0.2); flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 20px;}
     .profile-center-glow { width: 80px; height: 80px; margin: 0; }
