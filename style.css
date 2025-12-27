@@ -326,3 +326,42 @@ a, button, .card-3d-gold, .nav-arrow-gold {
     .card-3d-gold { width: 140px; height: 190px; margin: 0 5px; }
     .prev-3d { left: -5px; } .next-3d { right: -5px; }
 }
+
+/* --- MARCA DE AGUA TIPO FANTASMA --- */
+.watermark-ghost {
+    position: fixed;
+    bottom: 10px;       /* Pegado al borde inferior */
+    left: 0; 
+    width: 100%;
+    text-align: center;
+    
+    /* Asegúrate de tener una fuente definida o usa sans-serif */
+    font-family: var(--font-clean, sans-serif); 
+    font-size: 10px;    /* Letra bien pequeña */
+    letter-spacing: 2px; /* Espaciado para elegancia */
+    
+    /* El truco para que sea marca de agua: */
+    color: rgba(255, 255, 255, 0.5); 
+    opacity: 0.3;       /* Transparencia general (apenas visible) */
+    
+    z-index: 9999;
+    pointer-events: none; /* Ignora clicks en el texto normal */
+    transition: opacity 0.5s ease;
+}
+
+/* Efecto al pasar el mouse por encima */
+.watermark-ghost:hover {
+    opacity: 1; /* Se vuelve visible */
+}
+
+.watermark-ghost a {
+    color: #fff;        
+    text-decoration: none;
+    font-weight: 700;
+    pointer-events: auto; /* Habilita el click solo en el nombre */
+    margin-right: 5px;
+}
+
+.watermark-ghost span {
+    font-weight: 300;   
+}
