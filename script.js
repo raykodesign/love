@@ -222,4 +222,32 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', () => {
         updateGallery3D();
     });
+    /* --- BLOQUEAR INSPECCIONAR Y BOTÓN DERECHO --- */
+
+// 1. Bloquear Click Derecho
+document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
 });
+
+// 2. Bloquear Teclas de Desarrollo (F12, Ctrl+Shift+I, Ctrl+U, etc)
+document.addEventListener('keydown', (e) => {
+    // Bloquear F12
+    if (e.key === 'F12' || e.keyCode === 123) {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Bloquear Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (Consola e Inspector)
+    if (e.ctrlKey && e.shiftKey && 
+       (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.key === 'i' || e.key === 'j' || e.key === 'c')) {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Bloquear Ctrl+U (Ver código fuente)
+    if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) {
+        e.preventDefault();
+        return false;
+    }
+});
+
