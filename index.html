@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Love 20202 - Premium Release</title>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Dancing+Script&family=Inter:wght@300;400;700&family=Permanent+Marker&family=Rock+Salt&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
 <style>
     :root { --pastel-pink: #ffadd2; --pastel-pink-shadow: rgba(255, 173, 210, 0.8); }
 
@@ -53,7 +52,8 @@
         box-shadow: 0 10px 25px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.1);
     }
     
-    .artboard { width: 1040px; height: 640px; position: relative; transform-origin: center center; }
+    /* MESA DE TRABAJO AMPLIADA PARA EVITAR CHOQUES */
+    .artboard { width: 1150px; height: 640px; position: relative; transform-origin: center center; }
     
     .clickable { 
         cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffadd2' stroke='white' stroke-width='1.5' d='M10 2a2 2 0 0 1 2 2v4.5l1.5-.5a2 2 0 0 1 2.5 1l1.5 3a2 2 0 0 1 .5 1.5v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-3.5-1.5l-3-4a1 1 0 0 1 1.5-1.5l2 2V4a2 2 0 0 1 2-2z'/%3E%3C/svg%3E") 8 2, pointer !important;
@@ -137,9 +137,9 @@
     .vol-fill::after { content: ''; position: absolute; right: -4px; top: -3px; width: 8px; height: 8px; background: white; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.9); transition: transform 0.1s; }
     .vol-bg:active .vol-fill::after { transform: scale(1.3); }
 
-    /* PANEL DERECHO */
-    .right-bg-panel { position: absolute; left: 520px; top: 100px; width: 480px; height: 440px; border-radius: 35px; z-index: 1; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
-    .right-content-wrapper { position: absolute; left: 630px; top: 100px; width: 340px; height: 440px; z-index: 3; display: flex; flex-direction: column; padding-top: 20px; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
+    /* PANEL DERECHO - SEPARADO PARA NO CHOCAR */
+    .right-bg-panel { position: absolute; left: 560px; top: 100px; width: 550px; height: 440px; border-radius: 35px; z-index: 1; }
+    .right-content-wrapper { position: absolute; left: 720px; top: 100px; width: 350px; height: 440px; z-index: 3; display: flex; flex-direction: column; padding-top: 20px; }
     .top-nav { display: flex; align-items: center; color: #888; font-size: 11px; margin-bottom: 10px; padding-right: 30px;}
     .nav-tabs { display: flex; gap: 5px; margin-left: auto; margin-right: 15px; } 
     .tab { padding: 4px 10px; border-radius: 10px; background: rgba(255,255,255,0.05); transition: 0.3s; }
@@ -173,8 +173,8 @@
     .watermark { position: absolute; bottom: 70px; right: 60px; font-size: 10px; color: rgba(255, 255, 255, 0.15); text-decoration: none; font-family: 'Inter', sans-serif; letter-spacing: 1px; transition: all 0.3s ease; z-index: 10; pointer-events: auto; }
     .watermark:hover { color: var(--pastel-pink); text-shadow: 0 0 8px var(--pastel-pink); opacity: 1; }
 
-    /* TARJETA CENTRAL EN 3D */
-    .center-card-container { position: absolute; left: 390px; top: 130px; width: 260px; height: 390px; z-index: 15; perspective: 1200px; }
+    /* TARJETA CENTRAL EN 3D - CENTRADA EN SU PROPIO ESPACIO */
+    .center-card-container { position: absolute; left: 420px; top: 130px; width: 260px; height: 390px; z-index: 15; perspective: 1200px; }
     .center-card-container:hover { z-index: 25; } 
     .center-card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1); }
     .card-img-wrapper {
@@ -190,7 +190,8 @@
         opacity: 0; transition: opacity 0.3s; z-index: 5;
     }
     .center-card-container:hover .card-glare { opacity: 1; }
-    .card-img-wrapper img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; border-radius: 25px; transform: translateZ(40px); transition: transform 0.3s ease; }
+    /* NOTA: Cambié object-fit a cover para que tu foto se ajuste perfecta sin bordes negros */
+    .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; border-radius: 25px; transform: translateZ(40px); transition: transform 0.3s ease; }
     .center-card-container:hover .card-img-wrapper { border-color: var(--pastel-pink); animation: neonPulse 1.5s infinite alternate; }
     
     @keyframes neonPulse {
@@ -225,7 +226,7 @@
     .note { font-size: 10px; color: #888; font-style: italic; margin-bottom: 5px;}
 
     /* ================= RESPONSIVE DESIGN (MOBILE & TABLET) ================= */
-    @media (max-width: 1050px) {
+    @media (max-width: 1150px) {
         body { align-items: flex-start; overflow-y: auto; overflow-x: hidden; height: auto; min-height: 100vh; }
         .artboard { width: 100%; height: auto; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; gap: 30px; transform: none !important; }
         .main-title, .gallery-container, .mini-player, .right-content-wrapper, .center-card-container, .watermark { position: relative; left: auto; top: auto; right: auto; bottom: auto; transform: none !important; }
@@ -270,12 +271,12 @@
         <label>Biografía:</label>
         <textarea id="edit-bio"></textarea>
 
-<label>🎶 Lista de Música:</label>
-<div class="note">Pon 1 canción por línea respetando las comas.<br><b>Formato:</b> ruta.mp3, Título, Artista, link_imagen_portada</div>
-<textarea id="edit-playlist" style="min-height: 80px;"></textarea>
+        <label>🎶 Lista de Música:</label>
+        <div class="note">Pon 1 canción por línea respetando las comas.<br><b>Formato:</b> ruta.mp3, Título, Artista, link_imagen_portada</div>
+        <textarea id="edit-playlist" style="min-height: 80px;"></textarea>
 
         <label>Amigos (xat):</label>
-        <div class="note">Ve al perfil de xat.me, da click derecho en su foto y "Copiar dirección de la imagen". Pégalo aquí. Formato: Nombre, Enlace_De_Imagen_Copiado, online/offline</div>
+        <div class="note">Pon 1 amigo por línea. <b>Formato:</b> Nombre, enlace_o_numero_foto, online/offline</div>
         <textarea id="edit-friends" style="min-height: 60px;"></textarea>
 
         <label>Galería:</label>
@@ -373,10 +374,11 @@
 <script>
     function fitToScreen() {
         const artboard = document.querySelector('.artboard');
-        if (window.innerWidth <= 1050) { artboard.style.transform = `none`; return; }
+        // Actualizado para monitores más anchos
+        if (window.innerWidth <= 1150) { artboard.style.transform = `none`; return; }
         
         const winW = window.innerWidth; const winH = window.innerHeight;
-        const scale = Math.min(winW / 1060, winH / 660); 
+        const scale = Math.min(winW / 1170, winH / 660); 
         if(scale < 1) { artboard.style.transform = `scale(${scale})`; } 
         else { artboard.style.transform = `scale(1)`; }
     }
@@ -407,7 +409,10 @@
 
     const defaultData = {
         bio: "Eres mi amor para otra vida, mi amor para otra ocasión.\nLlegaste demasiado pronto y aun así fue tarde.\nMe entendías más que nadie, y no existía alguien,\nque te quisiera más que yo. Siempre he creído que \ntodo es posible y que lo imposible...Solo tarda \nun poquito más. Pero querido amor imposible,\ncontigo esa teoría está de más. A veces siento que \nfuimos impuntuales, o que el destino se haya\n encaprichado tanto con nosotros... Que decidió \nponernos un minuto tarde. Tal vez una persona\nantes o una persona después fuimos todo y no \nfuimos nada. Chino",
-        playlist: ["audio/cancion1.mp3", "audio/cancion2.mp3"],
+        playlist: [
+            { file: "audio/cancion1.mp3", title: "Mi Amor", artist: "Artista Favorito", cover: "https://picsum.photos/id/40/200/200" },
+            { file: "audio/cancion2.mp3", title: "Otra Canción", artist: "Tu Artista", cover: "" }
+        ],
         friends: [
             {name: "Koo", avatar: "20", status: "online"}, {name: "Xéin", avatar: "21", status: "offline"},
             {name: "Adeline", avatar: "22", status: "online"}, {name: "Amelie", avatar: "https://picsum.photos/id/23/100", status: "offline"} 
@@ -420,7 +425,7 @@
         ]
     };
 
-    let currentData = JSON.parse(localStorage.getItem('loveProfileData_V22')) || defaultData;
+    let currentData = JSON.parse(localStorage.getItem('loveProfileData_V24')) || defaultData;
     const bgAudio = document.getElementById('real-audio');
 
     function getAvatarUrl(val) {
@@ -474,7 +479,7 @@
     renderUI();
 
     /* ================= SEGURIDAD SHA-256 ================= */
-    let storedHash = localStorage.getItem('adminHash_V22');
+    let storedHash = localStorage.getItem('adminHash_V24');
 
     function openLoginPanel() {
         const loginOverlay = document.getElementById('login-overlay');
@@ -518,18 +523,13 @@
         const inputHash = await hashPassword(pwd);
         
         if (!storedHash) {
-            // Es la primera vez, guardamos la contraseña generada
             storedHash = inputHash;
-            localStorage.setItem('adminHash_V22', storedHash);
+            localStorage.setItem('adminHash_V24', storedHash);
             alert("¡Contraseña guardada y encriptada con éxito (SHA-256)!");
-            closeLoginPanel();
-            setTimeout(openAdminPanel, 300);
+            closeLoginPanel(); setTimeout(openAdminPanel, 300);
         } else if (inputHash === storedHash) {
-            closeLoginPanel();
-            setTimeout(openAdminPanel, 300);
-        } else {
-            alert("Contraseña incorrecta.");
-        }
+            closeLoginPanel(); setTimeout(openAdminPanel, 300);
+        } else { alert("Contraseña incorrecta."); }
     }
     
     document.getElementById('admin-pwd-input').addEventListener('keypress', function (e) {
@@ -538,7 +538,7 @@
 
     function resetPassword() {
         if(confirm("¿Seguro que quieres borrar la contraseña actual? Tendrás que crear una nueva la próxima vez que entres.")) {
-            localStorage.removeItem('adminHash_V22');
+            localStorage.removeItem('adminHash_V24');
             storedHash = null;
             closeAdminPanel();
             alert("Contraseña eliminada. Vuelve a entrar al panel para registrar una nueva clave.");
@@ -549,14 +549,16 @@
     const adminOverlay = document.getElementById('admin-overlay-panel');
     function openAdminPanel() {
         document.getElementById('edit-bio').value = currentData.bio;
+        
         let playlistText = currentData.playlist.map(p => {
-    let line = p.file || p; // Soporte por si queda un dato viejo
-    if (p.title) line += `, ${p.title}`;
-    if (p.artist) line += `, ${p.artist}`;
-    if (p.cover) line += `, ${p.cover}`;
-    return line;
-}).join('\n');
-document.getElementById('edit-playlist').value = playlistText;
+            let line = p.file || p; 
+            if (p.title) line += `, ${p.title}`;
+            if (p.artist) line += `, ${p.artist}`;
+            if (p.cover) line += `, ${p.cover}`;
+            return line;
+        }).join('\n');
+        document.getElementById('edit-playlist').value = playlistText;
+        
         let friendsText = currentData.friends.map(f => `${f.name}, ${f.avatar}, ${f.status}`).join('\n');
         document.getElementById('edit-friends').value = friendsText;
         document.getElementById('edit-gallery').value = currentData.gallery.join('\n');
@@ -575,31 +577,34 @@ document.getElementById('edit-playlist').value = playlistText;
     }
 
     function saveAdminData() {
-        currentData.bio = document.getElementById('edit-bio').value;// Guarda la nueva estructura de música
-const pLines = document.getElementById('edit-playlist').value.split('\n');
-currentData.playlist = pLines.filter(l => l.trim() !== '').map(line => {
-    let pts = line.split(',');
-    return {
-        file: pts[0] ? pts[0].trim() : '',
-        title: pts[1] ? pts[1].trim() : 'Track',
-        artist: pts[2] ? pts[2].trim() : 'Desconocido',
-        cover: pts[3] ? pts[3].trim() : ''
-    };
-});
-        currentData.playlist = pLines.filter(l => l.trim()!=='').map(l => l.trim());
+        currentData.bio = document.getElementById('edit-bio').value;
+        
+        // ¡¡AQUÍ ESTABA EL ERROR!! Ya eliminé la línea que borraba los títulos de las canciones
+        const pLines = document.getElementById('edit-playlist').value.split('\n');
+        currentData.playlist = pLines.filter(l => l.trim() !== '').map(line => {
+            let pts = line.split(',');
+            return {
+                file: pts[0] ? pts[0].trim() : '',
+                title: pts[1] ? pts[1].trim() : 'Track',
+                artist: pts[2] ? pts[2].trim() : 'Desconocido',
+                cover: pts[3] ? pts[3].trim() : ''
+            };
+        });
+        
         const fLines = document.getElementById('edit-friends').value.split('\n');
         currentData.friends = fLines.filter(l => l.trim()!=='').map(line => {
             let pts = line.split(',');
             return { name: pts[0]?pts[0].trim():'User', avatar: pts[1]?pts[1].trim():'', status: pts[2]?pts[2].trim().toLowerCase():'online' };
         });
+        
         const gLines = document.getElementById('edit-gallery').value.split('\n');
         currentData.gallery = gLines.filter(l => l.trim()!=='').map(l => l.trim());
 
-        localStorage.setItem('loveProfileData_V22', JSON.stringify(currentData));
+        localStorage.setItem('loveProfileData_V24', JSON.stringify(currentData));
         renderUI(); loadSong(0); closeAdminPanel();
     }
 
-    /* ================= MUSIC PLAYER ================= */
+    /* ================= MUSIC PLAYER MEJORADO ================= */
     const playBtn = document.getElementById('play-btn');
     const playIcon = document.getElementById('play-icon');
     const pauseIcon = document.getElementById('pause-icon');
@@ -636,79 +641,77 @@ currentData.playlist = pLines.filter(l => l.trim() !== '').map(line => {
         }
     }
 
-function loadSong(index) {
-    if(!currentData.playlist || currentData.playlist.length === 0) return;
-    if(index >= currentData.playlist.length) index = 0;
-    if(index < 0) index = currentData.playlist.length - 1;
-    
-    currentSongIndex = index; 
-    const songObj = currentData.playlist[currentSongIndex];
-    
-    // Asigna los datos manualmente
-    bgAudio.src = songObj.file || songObj; 
-    document.getElementById('ui-m-title').innerText = songObj.title || "Canción";
-    document.getElementById('ui-m-artist').innerText = songObj.artist || "Desconocido";
-    
-    if (songObj.cover) {
-        recordCover.style.backgroundImage = `url('${songObj.cover}')`;
-    } else {
-        recordCover.style.backgroundImage = 'none';
+    function loadSong(index) {
+        if(!currentData.playlist || currentData.playlist.length === 0) return;
+        if(index >= currentData.playlist.length) index = 0;
+        if(index < 0) index = currentData.playlist.length - 1;
+        
+        currentSongIndex = index; 
+        const songObj = currentData.playlist[currentSongIndex];
+        
+        bgAudio.src = songObj.file || songObj; 
+        document.getElementById('ui-m-title').innerText = songObj.title || "Canción";
+        document.getElementById('ui-m-artist').innerText = songObj.artist || "Desconocido";
+        
+        if (songObj.cover) {
+            recordCover.style.backgroundImage = `url('${songObj.cover}')`;
+        } else {
+            recordCover.style.backgroundImage = 'none';
+        }
+        
+        if(isPlaying) { 
+            bgAudio.play().then(() => updatePlayStateUI()).catch(e => { 
+                console.error("Error reproduciendo:", e);
+                setTimeout(playNext, 1500);
+            }); 
+        }
     }
-    
-    if(isPlaying) { 
-        bgAudio.play().then(() => updatePlayStateUI()).catch(e => { 
-            console.error("Error reproduciendo:", e);
-            // Si la canción falla, salta a la siguiente
-            setTimeout(playNext, 1500);
-        }); 
-    }
-}
 
-function togglePlay() {
-    if(!currentData.playlist || currentData.playlist.length === 0) { alert("Añade música en el panel."); return; }
-    hasInteracted = true; 
-    if (isPlaying) { 
-        bgAudio.pause(); 
-        isPlaying = false; 
-        updatePlayStateUI();
-    } else { 
-        bgAudio.play().then(() => {
-            isPlaying = true;
+    function togglePlay() {
+        if(!currentData.playlist || currentData.playlist.length === 0) { alert("Añade música en el panel."); return; }
+        hasInteracted = true; 
+        if (isPlaying) { 
+            bgAudio.pause(); 
+            isPlaying = false; 
             updatePlayStateUI();
-        }).catch(e => { 
-            console.error("No se pudo reproducir la canción."); 
-            setTimeout(playNext, 1000);
-        }); 
+        } else { 
+            bgAudio.play().then(() => {
+                isPlaying = true;
+                updatePlayStateUI();
+            }).catch(e => { 
+                console.error("No se pudo reproducir la canción."); 
+                setTimeout(playNext, 1000);
+            }); 
+        }
     }
-}
 
-function playNext() { 
-    loadSong(currentSongIndex + 1); 
-    isPlaying = true; 
-    updatePlayStateUI(); 
-}
-
-function playPrev() { 
-    loadSong(currentSongIndex - 1); 
-    isPlaying = true; 
-    updatePlayStateUI();
-}
-
-// SISTEMA SUPERVIVENCIA: Cuando termine la canción salta a la siguiente con seguridad.
-bgAudio.onended = function() {
-    console.log("Canción finalizada. Pasando a la siguiente...");
-    playNext();
-};
-
-// SISTEMA SUPERVIVENCIA 2: Si el enlace está roto en GitHub, salta a la siguiente.
-bgAudio.onerror = function() {
-    console.error("No se encontró el audio. Saltando track...");
-    if (currentData.playlist.length > 1) {
-        setTimeout(playNext, 1500);
+    function playNext() { 
+        loadSong(currentSongIndex + 1); 
+        isPlaying = true; 
+        updatePlayStateUI(); 
     }
-};
+    
+    function playPrev() { 
+        loadSong(currentSongIndex - 1); 
+        isPlaying = true; 
+        updatePlayStateUI();
+    }
+    
+    // SISTEMA SUPERVIVENCIA: Cuando termine la canción salta a la siguiente con seguridad.
+    bgAudio.onended = function() {
+        console.log("Canción finalizada. Pasando a la siguiente...");
+        playNext();
+    };
 
-loadSong(0);
+    // SISTEMA SUPERVIVENCIA 2: Si el enlace está roto en GitHub, salta a la siguiente.
+    bgAudio.onerror = function() {
+        console.error("No se encontró el audio. Saltando track...");
+        if (currentData.playlist.length > 1) {
+            setTimeout(playNext, 1500);
+        }
+    };
+
+    loadSong(0);
 
     /* ================= MODAL DE FOTOS ================= */
     function openModal(imgUrl) { 
@@ -727,30 +730,17 @@ loadSong(0);
     const card = document.getElementById('js-tilt-card');
     const cardGlare = document.getElementById('card-glare');
     const pageOverlay = document.getElementById('page-overlay');
-    const rightPanel = document.getElementById('right-panel-area');
-    const rightBg = document.getElementById('right-bg');
 
-    rightPanel.addEventListener('mouseenter', () => { 
-        if(window.innerWidth > 1050) {
-            cardContainer.style.transform = 'translateX(-90px)'; 
-            rightBg.style.transform = 'translateX(-40px)';
-            rightPanel.style.transform = 'translateX(-40px)';
-        }
-    });
-    rightPanel.addEventListener('mouseleave', () => { 
-        if(window.innerWidth > 1050) {
-            cardContainer.style.transform = 'translateX(0)'; rightBg.style.transform = 'translateX(0)'; rightPanel.style.transform = 'translateX(0)';
-        }
-    });
-
+    // Quité la función que empujaba la tarjeta a la izquierda para evitar el choque.
+    
     cardContainer.addEventListener('mouseenter', () => {
-        if(window.innerWidth > 1050) {
+        if(window.innerWidth > 1150) {
             floatWrap.style.animationPlayState = 'paused'; card.style.transition = `transform 0.1s ease-out`; pageOverlay.style.opacity = '1'; 
         }
     });
     
     cardContainer.addEventListener('mousemove', (e) => {
-        if(window.innerWidth > 1050) {
+        if(window.innerWidth > 1150) {
             const rect = cardContainer.getBoundingClientRect();
             const x = e.clientX - rect.left; const y = e.clientY - rect.top;
             const centerX = rect.width / 2; const centerY = rect.height / 2;
@@ -764,7 +754,7 @@ loadSong(0);
     });
 
     cardContainer.addEventListener('mouseleave', () => {
-        if(window.innerWidth > 1050) {
+        if(window.innerWidth > 1150) {
             card.style.transform = `rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
             card.style.transition = `transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)`;
             cardGlare.style.background = `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2) 0%, transparent 50%)`;
@@ -775,4 +765,3 @@ loadSong(0);
 
 </body>
 </html>
-
