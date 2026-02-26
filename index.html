@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Love 20202 - Premium Release</title>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Dancing+Script&family=Inter:wght@300;400;700&family=Permanent+Marker&family=Rock+Salt&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
 <style>
     :root { --pastel-pink: #ffadd2; --pastel-pink-shadow: rgba(255, 173, 210, 0.8); }
 
@@ -30,13 +29,6 @@
     #bg-video {
         position: fixed; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto;
         transform: translate(-50%, -50%); object-fit: cover; z-index: -2; opacity: 0.6; filter: hue-rotate(320deg); transition: filter 0.5s ease;
-    }
-    
-    #page-overlay { 
-        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-        background: rgba(0,0,0,0.95); 
-        z-index: 8; 
-        opacity: 0; pointer-events: none; transition: opacity 0.5s ease; 
     }
 
     .anim-fade { opacity: 0; animation: floatIn 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
@@ -173,13 +165,14 @@
     .watermark { position: absolute; bottom: 70px; right: 60px; font-size: 10px; color: rgba(255, 255, 255, 0.15); text-decoration: none; font-family: 'Inter', sans-serif; letter-spacing: 1px; transition: all 0.3s ease; z-index: 10; pointer-events: auto; }
     .watermark:hover { color: var(--pastel-pink); text-shadow: 0 0 8px var(--pastel-pink); opacity: 1; }
 
-    /* TARJETA CENTRAL EN 3D */
+    /* TARJETA CENTRAL EN 3D - FONDO NEGRO ELIMINADO COMPLETAMENTE */
     .center-card-container { position: absolute; left: 390px; top: 130px; width: 260px; height: 390px; z-index: 15; perspective: 1200px; }
     .center-card-container:hover { z-index: 25; } 
     .center-card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1); }
     .card-img-wrapper {
         position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-        border-radius: 25px; background-color: #000; border: 2px solid transparent; 
+        border-radius: 25px; background-color: transparent; /* Ahora es transparente */
+        border: 2px solid transparent; 
         box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.15);
         transform-style: preserve-3d; transition: border-color 0.5s ease, box-shadow 0.5s ease;
         overflow: hidden; transform: translateZ(10px);
@@ -270,12 +263,12 @@
         <label>Biografía:</label>
         <textarea id="edit-bio"></textarea>
 
-        <label>Música (Orden de Reproducción):</label>
-        <div class="note">Pon 1 ruta por línea (ej: audio/cancion1.mp3). Borra la línea para eliminarla.</div>
-        <textarea id="edit-playlist" style="min-height: 60px;"></textarea>
+        <label>🎶 Lista de Música:</label>
+        <div class="note">Pon 1 canción por línea respetando las comas.<br><b>Formato:</b> ruta.mp3, Título, Artista, link_imagen_portada</div>
+        <textarea id="edit-playlist" style="min-height: 80px;"></textarea>
 
         <label>Amigos (xat):</label>
-        <div class="note">Ve al perfil de xat.me, da click derecho en su foto y "Copiar dirección de la imagen". Pégalo aquí. Formato: Nombre, Enlace_De_Imagen_Copiado, online/offline</div>
+        <div class="note">Pon 1 amigo por línea. <b>Formato:</b> Nombre, enlace_o_numero_foto, online/offline</div>
         <textarea id="edit-friends" style="min-height: 60px;"></textarea>
 
         <label>Galería:</label>
@@ -405,9 +398,13 @@
         }
     });
 
+    /* ESTRUCTURA MUSICAL MEJORADA: Soporta Título, Artista y Portada */
     const defaultData = {
         bio: "Eres mi amor para otra vida, mi amor para otra ocasión.\nLlegaste demasiado pronto y aun así fue tarde.\nMe entendías más que nadie, y no existía alguien,\nque te quisiera más que yo. Siempre he creído que \ntodo es posible y que lo imposible...Solo tarda \nun poquito más. Pero querido amor imposible,\ncontigo esa teoría está de más. A veces siento que \nfuimos impuntuales, o que el destino se haya\n encaprichado tanto con nosotros... Que decidió \nponernos un minuto tarde. Tal vez una persona\nantes o una persona después fuimos todo y no \nfuimos nada. Chino",
-        playlist: ["audio/cancion1.mp3", "audio/cancion2.mp3"],
+        playlist: [
+            { file: "audio/cancion1.mp3", title: "Se me nota menos", artist: "", cover: "" },
+            { file: "audio/cancion2.mp3", title: "Fire Fire", artist: "Flora Adams", cover: "" }
+        ],
         friends: [
             {name: "Koo", avatar: "20", status: "online"}, {name: "Xéin", avatar: "21", status: "offline"},
             {name: "Adeline", avatar: "22", status: "online"}, {name: "Amelie", avatar: "https://picsum.photos/id/23/100", status: "offline"} 
@@ -420,7 +417,7 @@
         ]
     };
 
-    let currentData = JSON.parse(localStorage.getItem('loveProfileData_V22')) || defaultData;
+    let currentData = JSON.parse(localStorage.getItem('loveProfileData_V27')) || defaultData;
     const bgAudio = document.getElementById('real-audio');
 
     function getAvatarUrl(val) {
@@ -474,7 +471,7 @@
     renderUI();
 
     /* ================= SEGURIDAD SHA-256 ================= */
-    let storedHash = localStorage.getItem('adminHash_V22');
+    let storedHash = localStorage.getItem('adminHash_V27');
 
     function openLoginPanel() {
         const loginOverlay = document.getElementById('login-overlay');
@@ -518,18 +515,13 @@
         const inputHash = await hashPassword(pwd);
         
         if (!storedHash) {
-            // Es la primera vez, guardamos la contraseña generada
             storedHash = inputHash;
-            localStorage.setItem('adminHash_V22', storedHash);
+            localStorage.setItem('adminHash_V27', storedHash);
             alert("¡Contraseña guardada y encriptada con éxito (SHA-256)!");
-            closeLoginPanel();
-            setTimeout(openAdminPanel, 300);
+            closeLoginPanel(); setTimeout(openAdminPanel, 300);
         } else if (inputHash === storedHash) {
-            closeLoginPanel();
-            setTimeout(openAdminPanel, 300);
-        } else {
-            alert("Contraseña incorrecta.");
-        }
+            closeLoginPanel(); setTimeout(openAdminPanel, 300);
+        } else { alert("Contraseña incorrecta."); }
     }
     
     document.getElementById('admin-pwd-input').addEventListener('keypress', function (e) {
@@ -538,7 +530,7 @@
 
     function resetPassword() {
         if(confirm("¿Seguro que quieres borrar la contraseña actual? Tendrás que crear una nueva la próxima vez que entres.")) {
-            localStorage.removeItem('adminHash_V22');
+            localStorage.removeItem('adminHash_V27');
             storedHash = null;
             closeAdminPanel();
             alert("Contraseña eliminada. Vuelve a entrar al panel para registrar una nueva clave.");
@@ -549,7 +541,17 @@
     const adminOverlay = document.getElementById('admin-overlay-panel');
     function openAdminPanel() {
         document.getElementById('edit-bio').value = currentData.bio;
-        document.getElementById('edit-playlist').value = currentData.playlist.join('\n');
+        
+        // Carga la nueva estructura de lista de reproducción
+        let playlistText = currentData.playlist.map(p => {
+            let line = p.file || p; 
+            if (p.title) line += `, ${p.title}`;
+            if (p.artist) line += `, ${p.artist}`;
+            if (p.cover) line += `, ${p.cover}`;
+            return line;
+        }).join('\n');
+        document.getElementById('edit-playlist').value = playlistText;
+        
         let friendsText = currentData.friends.map(f => `${f.name}, ${f.avatar}, ${f.status}`).join('\n');
         document.getElementById('edit-friends').value = friendsText;
         document.getElementById('edit-gallery').value = currentData.gallery.join('\n');
@@ -569,21 +571,33 @@
 
     function saveAdminData() {
         currentData.bio = document.getElementById('edit-bio').value;
+        
+        // Guarda la nueva estructura de música
         const pLines = document.getElementById('edit-playlist').value.split('\n');
-        currentData.playlist = pLines.filter(l => l.trim()!=='').map(l => l.trim());
+        currentData.playlist = pLines.filter(l => l.trim() !== '').map(line => {
+            let pts = line.split(',');
+            return {
+                file: pts[0] ? pts[0].trim() : '',
+                title: pts[1] ? pts[1].trim() : 'Track',
+                artist: pts[2] ? pts[2].trim() : 'Desconocido',
+                cover: pts[3] ? pts[3].trim() : ''
+            };
+        });
+
         const fLines = document.getElementById('edit-friends').value.split('\n');
         currentData.friends = fLines.filter(l => l.trim()!=='').map(line => {
             let pts = line.split(',');
             return { name: pts[0]?pts[0].trim():'User', avatar: pts[1]?pts[1].trim():'', status: pts[2]?pts[2].trim().toLowerCase():'online' };
         });
+        
         const gLines = document.getElementById('edit-gallery').value.split('\n');
         currentData.gallery = gLines.filter(l => l.trim()!=='').map(l => l.trim());
 
-        localStorage.setItem('loveProfileData_V22', JSON.stringify(currentData));
+        localStorage.setItem('loveProfileData_V27', JSON.stringify(currentData));
         renderUI(); loadSong(0); closeAdminPanel();
     }
 
-    /* ================= MUSIC PLAYER ================= */
+    /* ================= MUSIC PLAYER MEJORADO ================= */
     const playBtn = document.getElementById('play-btn');
     const playIcon = document.getElementById('play-icon');
     const pauseIcon = document.getElementById('pause-icon');
@@ -625,53 +639,72 @@
         if(index >= currentData.playlist.length) index = 0;
         if(index < 0) index = currentData.playlist.length - 1;
         
-        currentSongIndex = index; const songUrl = currentData.playlist[currentSongIndex];
-        bgAudio.src = songUrl;
+        currentSongIndex = index; 
+        const songObj = currentData.playlist[currentSongIndex];
         
-        document.getElementById('ui-m-title').innerText = "Cargando...";
-        document.getElementById('ui-m-artist').innerText = "...";
-        recordCover.style.backgroundImage = 'none';
-
-        if(typeof jsmediatags !== 'undefined') {
-            jsmediatags.read(songUrl, {
-                onSuccess: function(tag) {
-                    const tags = tag.tags;
-                    if(tags.title) document.getElementById('ui-m-title').innerText = tags.title;
-                    else {
-                        let filename = songUrl.substring(songUrl.lastIndexOf('/')+1).replace('.mp3','');
-                        document.getElementById('ui-m-title').innerText = filename || "Canción";
-                    }
-                    if(tags.artist) document.getElementById('ui-m-artist').innerText = tags.artist;
-                    else document.getElementById('ui-m-artist').innerText = "Desconocido";
-
-                    if(tags.picture) {
-                        let base64String = "";
-                        for (let i = 0; i < tags.picture.data.length; i++) { base64String += String.fromCharCode(tags.picture.data[i]); }
-                        const base64 = "data:" + tags.picture.format + ";base64," + window.btoa(base64String);
-                        recordCover.style.backgroundImage = `url('${base64}')`;
-                    }
-                },
-                onError: function() {
-                    let filename = songUrl.substring(songUrl.lastIndexOf('/')+1).replace('.mp3','');
-                    document.getElementById('ui-m-title').innerText = filename || "Canción";
-                    document.getElementById('ui-m-artist').innerText = "Desconocido";
-                }
-            });
+        bgAudio.src = songObj.file || songObj; 
+        document.getElementById('ui-m-title').innerText = songObj.title || "Canción";
+        document.getElementById('ui-m-artist').innerText = songObj.artist || "Desconocido";
+        
+        if (songObj.cover) {
+            recordCover.style.backgroundImage = `url('${songObj.cover}')`;
+        } else {
+            recordCover.style.backgroundImage = 'none';
         }
         
-        if(isPlaying) { bgAudio.play().then(() => updatePlayStateUI()).catch(e => { isPlaying = false; updatePlayStateUI(); }); }
+        if(isPlaying) { 
+            bgAudio.play().then(() => updatePlayStateUI()).catch(e => { 
+                console.error("Error reproduciendo:", e);
+                // Si falla, salta a la siguiente tras un instante
+                setTimeout(playNext, 1500);
+            }); 
+        }
     }
 
     function togglePlay() {
         if(!currentData.playlist || currentData.playlist.length === 0) { alert("Añade música en el panel."); return; }
         hasInteracted = true; 
-        if (isPlaying) { bgAudio.pause(); } else { bgAudio.play().catch(e => console.error("Asegúrate de que la ruta de la canción existe.")); }
-        isPlaying = !isPlaying; updatePlayStateUI();
+        if (isPlaying) { 
+            bgAudio.pause(); 
+            isPlaying = false; 
+            updatePlayStateUI();
+        } else { 
+            bgAudio.play().then(() => {
+                isPlaying = true;
+                updatePlayStateUI();
+            }).catch(e => { 
+                console.error("No se pudo reproducir la canción."); 
+                setTimeout(playNext, 1000);
+            }); 
+        }
     }
 
-    function playNext() { loadSong(currentSongIndex + 1); isPlaying = true; }
-    function playPrev() { loadSong(currentSongIndex - 1); isPlaying = true; }
-    bgAudio.addEventListener('ended', playNext);
+    function playNext() { 
+        loadSong(currentSongIndex + 1); 
+        isPlaying = true; 
+        updatePlayStateUI(); 
+    }
+    
+    function playPrev() { 
+        loadSong(currentSongIndex - 1); 
+        isPlaying = true; 
+        updatePlayStateUI();
+    }
+    
+    // SISTEMA SUPERVIVENCIA: Cuando termine la canción salta a la siguiente
+    bgAudio.onended = function() {
+        console.log("Canción finalizada. Pasando a la siguiente...");
+        playNext();
+    };
+
+    // SISTEMA SUPERVIVENCIA: Si el enlace está roto
+    bgAudio.onerror = function() {
+        console.error("No se encontró el audio. Saltando track...");
+        if (currentData.playlist.length > 1) {
+            setTimeout(playNext, 1500);
+        }
+    };
+
     loadSong(0);
 
     /* ================= MODAL DE FOTOS ================= */
@@ -690,7 +723,7 @@
     const floatWrap = document.getElementById('float-wrap');
     const card = document.getElementById('js-tilt-card');
     const cardGlare = document.getElementById('card-glare');
-    const pageOverlay = document.getElementById('page-overlay');
+    // ELIMINADA la variable pageOverlay por completo para evitar que se oscurezca
     const rightPanel = document.getElementById('right-panel-area');
     const rightBg = document.getElementById('right-bg');
 
@@ -709,7 +742,9 @@
 
     cardContainer.addEventListener('mouseenter', () => {
         if(window.innerWidth > 1050) {
-            floatWrap.style.animationPlayState = 'paused'; card.style.transition = `transform 0.1s ease-out`; pageOverlay.style.opacity = '1'; 
+            floatWrap.style.animationPlayState = 'paused'; 
+            card.style.transition = `transform 0.1s ease-out`; 
+            // Ya no hay pageOverlay.style.opacity = '1';
         }
     });
     
@@ -732,7 +767,8 @@
             card.style.transform = `rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
             card.style.transition = `transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)`;
             cardGlare.style.background = `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2) 0%, transparent 50%)`;
-            pageOverlay.style.opacity = '0'; setTimeout(() => floatWrap.style.animationPlayState = 'running', 500); 
+            // Ya no hay pageOverlay.style.opacity = '0';
+            setTimeout(() => floatWrap.style.animationPlayState = 'running', 500); 
         }
     });
 </script>
